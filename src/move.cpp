@@ -136,4 +136,69 @@ void move()
       cout << "\nERROR\n";
       return;
     }
+    if(MoveCheck(x1,x2,y1,y2,turn)){
+      if (board[x1][y1] == 'P') {
+        board[x2][y2] = 'P';
+        board[x1][y1] = ' ';
+      }
+      else
+        if (board[x1][y1] == 'p') {
+          board[x2][y2] = 'p';
+          board[x1][y1] = ' ';
+        }
+    }
+}
+
+int MoveCheck(int x1, int x2, int y1, int y2, string turn)
+{
+    int flag = 0;
+    if ((x1 == x2) && (x1 == y2)) {
+        cout << "\nERROR\n";
+        return 0;
+    }
+    switch (board[x1][y1]) {
+    case ' ':
+        cout << "\nERROR\n";
+        return 0;
+
+    case 'P':
+        if ((y1 == y2) && (x1 - x2 == 1) && (board[x2][y2] == ' '))
+            flag = 1;
+        if ((y1 == y2) && (x1 - x2 == 2) && (x1 == 6)
+            && (board[x2][y2] == ' ')) {
+            if (board[x2 + 1][y2] == ' ') {
+                flag = 1;
+            } else {
+                cout << "\nERROR\n";
+                return 0;
+            }
+        }
+        if ((x1 - x2 == 1) && (board[x2][x2] != ' ')
+            && ((y1 - y2 == 1) || (y2 - y1 == 1)))
+            flag = 1;
+        break;
+
+    case 'p':
+        if ((y1 == y2) && (x2 - x1 == 1) && (board[x2][y2] == ' '))
+            flag = 1;
+        if ((y1 == y2) && (x2 - x1 == 2) && (x1 == 1)
+            && (board[x2][y2] == ' ')) {
+            if (board[x2 - 1][y2] == ' ') {
+                flag = 1;
+            } else {
+                cout << "\nERROR\n";
+                return 0;
+            }
+        }
+        if ((x2 - x1 == 1) && (board[x2][y2] != ' ')
+            && ((y2 - y1 == 1) || (y1 - y2 == 1)))
+            flag = 1;
+        break;
+
+    default:
+        flag = 0;
+        break;
+    }
+
+    return flag;
 }
