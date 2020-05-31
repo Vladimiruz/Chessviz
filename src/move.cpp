@@ -1,5 +1,32 @@
-#include "draw.h"
 #include "move.h"
+
+
+int CheckFriend(int x2, int y2)
+{
+    int pass = 1;
+    switch (team) {
+    case 0:
+        if ((board[x2][y2] == 'P') || (board[x2][y2] == 'R')
+            || (board[x2][y2] == 'N') || (board[x2][y2] == 'B')
+            || (board[x2][y2] == 'Q') || (board[x2][y2] == 'K')) {
+            cout << "\n ERROR: You can't move your figure on your figures \n "
+                    "\n";
+            pass = 0;
+        }
+        break;
+    case 1:
+        if ((board[x2][y2] == 'p') || (board[x2][y2] == 'r')
+            || (board[x2][y2] == 'n') || (board[x2][y2] == 'b')
+            || (board[x2][y2] == 'q') || (board[x2][y2] == 'k')) {
+            cout << "\n ERROR: You can't move your figure on your figures \n "
+                    "\n";
+            pass = 0;
+        }
+        break;
+    }
+    return pass;
+}
+
 
 void move()
 {
@@ -137,68 +164,536 @@ void move()
       return;
     }
     if(MoveCheck(x1,x2,y1,y2,turn)){
-      if (board[x1][y1] == 'P') {
-        board[x2][y2] = 'P';
-        board[x1][y1] = ' ';
-      }
+      board[x2][y2] = board[x1][y1];
+      board[x1][y1] = ' ';
+      if(team==0)
+        team++;
       else
-        if (board[x1][y1] == 'p') {
-          board[x2][y2] = 'p';
-          board[x1][y1] = ' ';
-        }
+        team--;
     }
 }
 
 int MoveCheck(int x1, int x2, int y1, int y2, string turn)
 {
-    int flag = 0;
-    if ((x1 == x2) && (x1 == y2)) {
-        cout << "\nERROR\n";
-        return 0;
-    }
-    switch (board[x1][y1]) {
-    case ' ':
-        cout << "\nERROR\n";
-        return 0;
-
-    case 'P':
-        if ((y1 == y2) && (x1 - x2 == 1) && (board[x2][y2] == ' '))
-            flag = 1;
-        if ((y1 == y2) && (x1 - x2 == 2) && (x1 == 6)
-            && (board[x2][y2] == ' ')) {
-            if (board[x2 + 1][y2] == ' ') {
-                flag = 1;
-            } else {
+  int pass = 0;
+  if ((x1 == x2) && (x1 == y2)) {
+    cout << "\nERROR\n";
+    return 0;
+  }
+  switch (team) {
+    case 0:
+      switch (board[x1][y1]) {
+        case ' ':
+          cout << "\nERROR\n";
+          return 0;
+        case 'P':
+          if (CheckFriend(x2, y2)) {
+            if ((y1 == y2) && (x1 - x2 == 1) && (board[x2][y2] == ' '))
+              pass = 1;
+            if ((y1 == y2) && (x1 - x2 == 2) && (x1 == 6)
+                && (board[x2][y2] == ' ')) {
+              if (board[x2 + 1][y2] == ' ') {
+                pass = 1;
+              } else {
                 cout << "\nERROR\n";
                 return 0;
+              }
             }
-        }
-        if ((x1 - x2 == 1) && (board[x2][x2] != ' ')
-            && ((y1 - y2 == 1) || (y2 - y1 == 1)))
-            flag = 1;
-        break;
+            if ((x1 - x2 == 1) && (board[x2][x2] != ' ')
+                && ((y1 - y2 == 1) || (y2 - y1 == 1)))
+              pass = 1;
+          }
+          break;
 
-    case 'p':
-        if ((y1 == y2) && (x2 - x1 == 1) && (board[x2][y2] == ' '))
-            flag = 1;
-        if ((y1 == y2) && (x2 - x1 == 2) && (x1 == 1)
-            && (board[x2][y2] == ' ')) {
-            if (board[x2 - 1][y2] == ' ') {
-                flag = 1;
-            } else {
+        case 'R':
+          if (CheckFriend(x2, y2)) {
+            if ((y1 == y2) && (x1 != x2)) {
+              if (x1 > x2) {
+                for (int i = x1 - 1; i > x2; i--) {
+                  if (board[i][y1] != ' ') {
+                    cout << "\n ERROR: Rook can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+              if (x1 < x2) {
+                for (int i = x2 - 1; i > x1; i--) {
+                  if (board[i][y1] != ' ') {
+                    cout << "\n ERROR: Rook can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((x1 == x2) && (y1 != y2)) {
+              if (y1 > y2) {
+                for (int i = y1 - 1; i > y2; i--) {
+                  if (board[x1][i] != ' ') {
+                    cout << "\n ERROR: Rook can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+              if (y1 < y2) {
+                for (int i = y2 - 1; i > y1; i--) {
+                  if (board[x1][i] != ' ') {
+                    cout << "\n ERROR: Rook can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+          }
+          break;
+        case 'N':
+          if (CheckFriend(x2, y2)) {
+            if (((x2 == x1 - 2) && (y2 == y1 + 1))
+              || ((x2 == x1 - 2) && (y2 == y1 - 1))
+              || ((x2 == x1 + 2) && (y2 == y1 + 1))
+              || ((x2 == x1 + 2) && (y2 == y1 - 1))
+              || ((x2 == x1 - 1) && (y2 == y1 + 2))
+              || ((x2 == x1 - 1) && (y2 == y1 - 2))
+              || ((x2 == x1 + 1) && (y2 == y1 + 2))
+              || ((x2 == x1 + 1) && (y2 == y1 - 2))) {
+              pass = 1;
+            }
+          }
+          break;
+        case 'B':
+          if (CheckFriend(x2, y2)) {
+            if ((y2 < y1) && (x2 < x1)) {
+              if (y1 - y2 == x1 - x2) {
+                for (int i = y1 - 1, v = x1 - 1; i > y2 && v > x2;
+                     i--, v--) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Bishop can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 < y1) && (x2 > x1)) {
+              if (y1 - y2 == x2 - x1) {
+                for (int i = y1 - 1, v = x1 + 1; i > y2 && v < x2;
+                     i--, v++) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Bishop can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 > y1) && (x2 < x1)) {
+              if (y2 - y1 == x1 - x2) {
+                for (int i = y1 + 1, v = x1 - 1; i < y2 && v > x2;
+                    i++, v--) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Bishop can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 > y1) && (x2 > x1)) {
+              if (y2 - y1 == x2 - x1) {
+                for (int i = y1 + 1, v = x1 + 1; i < y2 && v < x2;
+                     i++, v++) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Bishop can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+          }
+          break;
+        case 'Q':
+          if (CheckFriend(x2, y2)) {
+            if ((y1 == y2) && (x1 != x2)) {
+              if (x1 > x2) {
+                for (int i = x1 - 1; i > x2; i--) {
+                  if (board[i][y1] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+              if (x1 < x2) {
+                for (int i = x2 - 1; i > x1; i--) {
+                  if (board[i][y1] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((x1 == x2) && (y1 != y2)) {
+              if (y1 > y2) {
+                for (int i = y1 - 1; i > y2; i--) {
+                  if (board[x1][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+              if (y1 < y2) {
+                for (int i = y2 - 1; i > y1; i--) {
+                  if (board[x1][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 < y1) && (x2 < x1)) {
+              if (y1 - y2 == x1 - x2) {
+                for (int i = y1 - 1, v = x1 - 1; i > y2 && v > x2;
+                    i--, v--) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 < y1) && (x2 > x1)) {
+              if (y1 - y2 == x2 - x1) {
+                for (int i = y1 - 1, v = x1 + 1; i > y2 && v < x2;
+                    i--, v++) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 > y1) && (x2 < x1)) {
+              if (y2 - y1 == x1 - x2) {
+                for (int i = y1 + 1, v = x1 - 1; i < y2 && v > x2;
+                   i++, v--) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 > y1) && (x2 > x1)) {
+              if (y2 - y1 == x2 - x1) {
+                for (int i = y1 + 1, v = x1 + 1; i < y2 && v < x2;
+                   i++, v++) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+          }
+          break;
+        case 'K':
+          if (CheckFriend(x2, y2)) {
+            if (((y2 - y1 >= -1) && (y2 - y1 <= 1))
+                && ((x2 - x1 >= -1) && (x2 - x1 <= 1))) {
+              pass = 1;
+            }
+          }
+          break;
+        default:
+          pass = 0;
+          break;
+      }
+      break;
+    case 1:
+      switch (board[x1][y1]) {
+        case ' ':
+          cout << "\nERROR\n";
+          return 0;
+        case 'p':
+          if (CheckFriend(x2, y2)) {
+            if ((y1 == y2) && (x2 - x1 == 1) && (board[x2][y2] == ' '))
+              pass = 1;
+            if ((y1 == y2) && (x2 - x1 == 2) && (x1 == 1)
+                && (board[x2][y2] == ' ')) {
+              if (board[x2 - 1][y2] == ' ') {
+                pass = 1;
+              } else {
                 cout << "\nERROR\n";
                 return 0;
+              }
             }
-        }
-        if ((x2 - x1 == 1) && (board[x2][y2] != ' ')
-            && ((y2 - y1 == 1) || (y1 - y2 == 1)))
-            flag = 1;
-        break;
+            if ((x2 - x1 == 1) && (board[x2][y2] != ' ')
+                && ((y2 - y1 == 1) || (y1 - y2 == 1)))
+              pass = 1;
+          }
+          break;
 
+        case 'r':
+          if (CheckFriend(x2, y2)) {
+            if ((y1 == y2) && (x1 != x2)) {
+              if (x1 > x2) {
+                for (int i = x1 - 1; i > x2; i--) {
+                  if (board[i][y1] != ' ') {
+                    cout << "\n ERROR: Rook can't reach the "
+                              "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+              if (x1 < x2) {
+                for (int i = x2 - 1; i > x1; i--) {
+                  if (board[i][y1] != ' ') {
+                    cout << "\n ERROR: Rook can't reach the "
+                              "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((x1 == x2) && (y1 != y2)) {
+              if (y1 > y2) {
+                for (int i = y1 - 1; i > y2; i--) {
+                  if (board[x1][i] != ' ') {
+                    cout << "\n ERROR: Rook can't reach the "
+                              "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+              if (y1 < y2) {
+                for (int i = y2 - 1; i > y1; i--) {
+                  if (board[x1][i] != ' ') {
+                    cout << "\n ERROR: Rook can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+          }
+          break;
+        case 'n':
+          if (CheckFriend(x2, y2)) {
+            if (((x2 == x1 - 2) && (y2 == y1 + 1))
+              || ((x2 == x1 - 2) && (y2 == y1 - 1))
+              || ((x2 == x1 + 2) && (y2 == y1 + 1))
+              || ((x2 == x1 + 2) && (y2 == y1 - 1))
+              || ((x2 == x1 - 1) && (y2 == y1 + 2))
+              || ((x2 == x1 - 1) && (y2 == y1 - 2))
+              || ((x2 == x1 + 1) && (y2 == y1 + 2))
+              || ((x2 == x1 + 1) && (y2 == y1 - 2))) {
+              pass = 1;
+            }
+          }
+          break;
+        case 'b':
+          if (CheckFriend(x2, y2)) {
+            if ((y2 < y1) && (x2 < x1)) {
+              if (y1 - y2 == x1 - x2) {
+                for (int i = y1 - 1, v = x1 - 1; i > y2 && v > x2;
+                    i--, v--) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Bishop can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 < y1) && (x2 > x1)) {
+              if (y1 - y2 == x2 - x1) {
+                for (int i = y1 - 1, v = x1 + 1; i > y2 && v < x2;
+                     i--, v++) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Bishop can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 > y1) && (x2 < x1)) {
+              if (y2 - y1 == x1 - x2) {
+                for (int i = y1 + 1, v = x1 - 1; i < y2 && v > x2;
+                    i++, v--) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Bishop can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 > y1) && (x2 > x1)) {
+              if (y2 - y1 == x2 - x1) {
+                for (int i = y1 + 1, v = x1 + 1; i < y2 && v < x2;
+                     i++, v++) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Bishop can't reach the "
+                            "position through the figure' \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+          }
+          break;
+        case 'q':
+          if (CheckFriend(x2, y2)) {
+            if ((y1 == y2) && (x1 != x2)) {
+              if (x1 > x2) {
+                for (int i = x1 - 1; i > x2; i--) {
+                  if (board[i][y1] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+              if (x1 < x2) {
+                for (int i = x2 - 1; i > x1; i--) {
+                  if (board[i][y1] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((x1 == x2) && (y1 != y2)) {
+              if (y1 > y2) {
+                for (int i = y1 - 1; i > y2; i--) {
+                  if (board[x1][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+              if (y1 < y2) {
+                for (int i = y2 - 1; i > y1; i--) {
+                  if (board[x1][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 < y1) && (x2 < x1)) {
+              if (y1 - y2 == x1 - x2) {
+                for (int i = y1 - 1, v = x1 - 1; i > y2 && v > x2;
+                   i--, v--) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 < y1) && (x2 > x1)) {
+              if (y1 - y2 == x2 - x1) {
+                for (int i = y1 - 1, v = x1 + 1; i > y2 && v < x2;
+                   i--, v++) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 > y1) && (x2 < x1)) {
+              if (y2 - y1 == x1 - x2) {
+                for (int i = y1 + 1, v = x1 - 1; i < y2 && v > x2;
+                     i++, v--) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+            if ((y2 > y1) && (x2 > x1)) {
+              if (y2 - y1 == x2 - x1) {
+                for (int i = y1 + 1, v = x1 + 1; i < y2 && v < x2;
+                   i++, v++) {
+                  if (board[v][i] != ' ') {
+                    cout << "\n ERROR: Queen can't reach the "
+                            "position through the figure \n \n";
+                    return 0;
+                  }
+                }
+                pass = 1;
+              }
+            }
+          }
+          break;
+        case 'k':
+          if (CheckFriend(x2, y2)) {
+            if (((y2 - y1 >= -1) && (y2 - y1 <= 1))
+                && ((x2 - x1 >= -1) && (x2 - x1 <= 1))) {
+              pass = 1;
+            }
+          }
+          break;
+        default:
+          pass = 0;
+          break;
+      }
+      break;
     default:
-        flag = 0;
-        break;
-    }
-
-    return flag;
+      pass = 0;
+      break;
+  }
+  return pass;
 }
