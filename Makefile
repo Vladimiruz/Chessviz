@@ -29,7 +29,6 @@ clang:
 	clang-format -i ./test/*.cpp
 
 test: gtestlib bin/test
-	bin/test
 
 gtestlib:
 	g++ -std=c++11 -isystem ${GOOGLE}/include -I ${GOOGLE} -pthread -c ${GOOGLE}/src/gtest-all.cc -o build/test/gtest-all.o
@@ -43,6 +42,9 @@ build/test/test.o:
 
 build/test/move.o:
 	$(g)  $(flags) src/move.cpp -o $@
+
+testrun:
+	bin/test
 
 cleantest:
 	rm build/test/*.o
