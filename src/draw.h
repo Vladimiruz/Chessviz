@@ -7,6 +7,8 @@
 
 using namespace std;
 
+extern char board[9][9];
+
 void drawboard();
 
 #endif
