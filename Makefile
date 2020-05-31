@@ -15,3 +15,6 @@ build/src/draw.o:
 
 run:
 	bin/main
+
+clean:
+	rm build/src/*.o

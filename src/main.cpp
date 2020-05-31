@@ -4,6 +4,8 @@ using namespace std;
 
 int main()
 {
-  drawboard();
+  while(true){
+    drawboard();
+  }
   return 0;
 }
