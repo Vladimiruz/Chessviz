@@ -23,6 +23,10 @@ run:
 clean:
 	rm build/src/*.o
 
+clang:
+	clang-format -i ./src/*.h
+	clang-format -i ./src/*.cpp
+	clang-format -i ./test/*.cpp
 
 test: gtestlib bin/test
 	bin/test
