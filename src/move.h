@@ -12,5 +12,6 @@ extern int team;
 
 void move();
 int MoveCheck(int x1, int x2, int y1, int y2, string turn);
+int CheckFriend(int x2, int y2);
 
 #endif

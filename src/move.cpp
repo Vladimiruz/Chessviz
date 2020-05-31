@@ -1,5 +1,33 @@
 #include "move.h"
 
+
+int CheckFriend(int x2, int y2)
+{
+    int pass = 1;
+    switch (team) {
+    case 0:
+        if ((board[x2][y2] == 'P') || (board[x2][y2] == 'R')
+            || (board[x2][y2] == 'N') || (board[x2][y2] == 'B')
+            || (board[x2][y2] == 'Q') || (board[x2][y2] == 'K')) {
+            cout << "\n ERROR: You can't move your figure on your figures \n "
+                    "\n";
+            pass = 0;
+        }
+        break;
+    case 1:
+        if ((board[x2][y2] == 'p') || (board[x2][y2] == 'r')
+            || (board[x2][y2] == 'n') || (board[x2][y2] == 'b')
+            || (board[x2][y2] == 'q') || (board[x2][y2] == 'k')) {
+            cout << "\n ERROR: You can't move your figure on your figures \n "
+                    "\n";
+            pass = 0;
+        }
+        break;
+    }
+    return pass;
+}
+
+
 void move()
 {
     int x1 = 9, x2 = 9, y1 = 0, y2 = 0;
@@ -159,20 +187,22 @@ int MoveCheck(int x1, int x2, int y1, int y2, string turn)
           cout << "\nERROR\n";
           return 0;
         case 'P':
-          if ((y1 == y2) && (x1 - x2 == 1) && (board[x2][y2] == ' '))
-            pass = 1;
-          if ((y1 == y2) && (x1 - x2 == 2) && (x1 == 6)
-              && (board[x2][y2] == ' ')) {
-            if (board[x2 + 1][y2] == ' ') {
+          if (CheckFriend(x2, y2)) {
+            if ((y1 == y2) && (x1 - x2 == 1) && (board[x2][y2] == ' '))
               pass = 1;
-            } else {
-              cout << "\nERROR\n";
-              return 0;
+            if ((y1 == y2) && (x1 - x2 == 2) && (x1 == 6)
+                && (board[x2][y2] == ' ')) {
+              if (board[x2 + 1][y2] == ' ') {
+                pass = 1;
+              } else {
+                cout << "\nERROR\n";
+                return 0;
+              }
             }
+            if ((x1 - x2 == 1) && (board[x2][x2] != ' ')
+                && ((y1 - y2 == 1) || (y2 - y1 == 1)))
+              pass = 1;
           }
-          if ((x1 - x2 == 1) && (board[x2][x2] != ' ')
-              && ((y1 - y2 == 1) || (y2 - y1 == 1)))
-            pass = 1;
           break;
       }
       break;
@@ -180,21 +210,26 @@ int MoveCheck(int x1, int x2, int y1, int y2, string turn)
 
     case 1:
       switch (board[x1][y1]) {
+        case ' ':
+          cout << "\nERROR\n";
+          return 0;
         case 'p':
-          if ((y1 == y2) && (x2 - x1 == 1) && (board[x2][y2] == ' '))
-            pass = 1;
-          if ((y1 == y2) && (x2 - x1 == 2) && (x1 == 1)
-              && (board[x2][y2] == ' ')) {
-            if (board[x2 - 1][y2] == ' ') {
+          if (CheckFriend(x2, y2)) {
+            if ((y1 == y2) && (x2 - x1 == 1) && (board[x2][y2] == ' '))
               pass = 1;
-            } else {
-              cout << "\nERROR\n";
-              return 0;
+            if ((y1 == y2) && (x2 - x1 == 2) && (x1 == 1)
+                && (board[x2][y2] == ' ')) {
+              if (board[x2 - 1][y2] == ' ') {
+                pass = 1;
+              } else {
+                cout << "\nERROR\n";
+                return 0;
+              }
             }
+            if ((x2 - x1 == 1) && (board[x2][y2] != ' ')
+                && ((y2 - y1 == 1) || (y1 - y2 == 1)))
+              pass = 1;
           }
-          if ((x2 - x1 == 1) && (board[x2][y2] != ' ')
-              && ((y2 - y1 == 1) || (y1 - y2 == 1)))
-            pass = 1;
           break;
         default:
           pass = 0;
