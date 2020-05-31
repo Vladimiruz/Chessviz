@@ -253,6 +253,20 @@ int MoveCheck(int x1, int x2, int y1, int y2, string turn)
             }
           }
           break;
+        case 'N':
+          if (CheckFriend(x2, y2, table)) {
+            if (((x2 == x1 - 2) && (y2 == y1 + 1))
+              || ((x2 == x1 - 2) && (y2 == y1 - 1))
+              || ((x2 == x1 + 2) && (y2 == y1 + 1))
+              || ((x2 == x1 + 2) && (y2 == y1 - 1))
+              || ((x2 == x1 - 1) && (y2 == y1 + 2))
+              || ((x2 == x1 - 1) && (y2 == y1 - 2))
+              || ((x2 == x1 + 1) && (y2 == y1 + 2))
+              || ((x2 == x1 + 1) && (y2 == y1 - 2))) {
+              flag = 1;
+            }
+          }
+          break;
 
         default:
           pass = 0;
@@ -333,6 +347,21 @@ int MoveCheck(int x1, int x2, int y1, int y2, string turn)
             }
           }
           break;
+        case 'n':
+          if (CheckFriend(x2, y2, table)) {
+            if (((x2 == x1 - 2) && (y2 == y1 + 1))
+              || ((x2 == x1 - 2) && (y2 == y1 - 1))
+              || ((x2 == x1 + 2) && (y2 == y1 + 1))
+              || ((x2 == x1 + 2) && (y2 == y1 - 1))
+              || ((x2 == x1 - 1) && (y2 == y1 + 2))
+              || ((x2 == x1 - 1) && (y2 == y1 - 2))
+              || ((x2 == x1 + 1) && (y2 == y1 + 2))
+              || ((x2 == x1 + 1) && (y2 == y1 - 2))) {
+              flag = 1;
+            }
+          }
+          break;
+
         default:
           pass = 0;
           break;
