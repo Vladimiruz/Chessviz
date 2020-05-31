@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include <iostream>
-#include <stdio.h>
+#include "draw.h"
 
 using namespace std;
 
@@ -17,10 +15,6 @@ char board[9][9] = {{'8', 'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
 
 int main()
 {
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            cout << "  " << board[i][j];
-        }
-        cout << endl;
-    };
+  drawboard();
+  return 0;
 }
