@@ -38,7 +38,7 @@ bin/test: build/test/test.o build/test/move.o
 	g++ -std=c++11 -isystem ${GOOGLE}/include -pthread $^ build/test/libgtest.a -o $@
 
 build/test/test.o:
-	g++ -std=c++11 -c -Wall test/test/test.cpp -I $(GOOGLE)/include -o $@
+	g++ -std=c++11 -c -Wall test/test.cpp -I $(GOOGLE)/include -o $@
 
 build/test/move.o:
 	$(g)  $(flags) src/move.cpp -o $@

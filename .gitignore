@@ -1,2 +1,5 @@
 build/src/*.o
+build/test/*.o
+build/test/*.a
 bin/main
+bin/test
