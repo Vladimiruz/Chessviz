@@ -7,7 +7,10 @@
 
 using namespace std;
 
+extern char board[9][9];
+extern int team;
+
 void move();
-int MoveCheck(int x1, int x2, int y1, int y2, string turn)
+int MoveCheck(int x1, int x2, int y1, int y2, string turn);
 
 #endif
